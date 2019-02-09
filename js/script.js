@@ -119,7 +119,9 @@ window.onload=function(){
 		var prevTime = performance.now();
 		var velocity = new THREE.Vector3();
 		var direction = new THREE.Vector3();
-		
+        var velocityConstant = 800.0;
+        var runMultiplier = 1.0;
+
 		function init() {
 			// create an AudioListener and add it to the camera
 			var listener = new THREE.AudioListener();
@@ -396,7 +398,9 @@ window.onload=function(){
 					case 32: // space
 						if ( canJump === true ) velocity.y += 200;
 						canJump = false;
-						break;
+                        break;
+                    case 16: // shift
+                        runMultiplier = 3;
 				}
 			};
 			var onKeyUp = function ( event ) {
@@ -416,7 +420,9 @@ window.onload=function(){
 					case 39: // right
 					case 68: // d
 						moveRight = false;
-						break;
+                        break;
+                    case 16: // shift
+                        runMultiplier = 1;
 				}
 			};
 			document.addEventListener( 'keydown', onKeyDown, false );
@@ -777,9 +783,9 @@ window.onload=function(){
 
 
 				if ( moveForward || moveBackward ) {
-					velocity.z -= direction.z * 800.0 * delta; 
+                    velocity.z -= direction.z * velocityConstant * runMultiplier * delta; 
 				}
-				if ( moveLeft || moveRight ) velocity.x -= direction.x * 800.0 * delta;
+				if ( moveLeft || moveRight ) velocity.x -= direction.x * velocityConstant * runMultiplier * delta;
 				if ( onObject === true ) {
 					velocity.y = Math.max( 0, velocity.y );
 					canJump = true;
