@@ -20,6 +20,7 @@ window.onload=function(){
 		var change;
 
 		var camera, scene, renderer, controls;
+        var backgroundSound;
 		var objects = [];
 		var raycaster;
 		var combohouse
@@ -96,7 +97,11 @@ window.onload=function(){
 				instructions.style.display = 'none';
 				// Ask the browser to lock the pointer
 				element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-				element.requestPointerLock();
+                element.requestPointerLock();
+
+                if (backgroundSound.context.state === "suspended") {
+                    backgroundSound.context.resume();
+                }
 			}, false );
 			goal.addEventListener( 'click', function ( event ) {
 				goal.style.display = 'none';
@@ -127,15 +132,15 @@ window.onload=function(){
 			var listener = new THREE.AudioListener();
 			
 			// create a global audio source
-			var sound = new THREE.Audio( listener );
+            backgroundSound = new THREE.Audio( listener );
 
 			// load a sound and set it as the Audio object's buffer
 			var audioLoader = new THREE.AudioLoader();
 			audioLoader.load( 'Sound/TheEnchantedForest.mp3', function( buffer ) {
-				sound.setBuffer( buffer );
-				sound.setLoop( true );
-				sound.setVolume( 0.5 );
-				sound.play();
+                backgroundSound.setBuffer( buffer );
+                backgroundSound.setLoop( true );
+                backgroundSound.setVolume(0.5);
+                backgroundSound.play();
 			});
 
 			camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 3000 );//1000
